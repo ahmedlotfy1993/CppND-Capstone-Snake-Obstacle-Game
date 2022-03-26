@@ -14,8 +14,8 @@ using namespace std;
 Game::Game(std::size_t grid_width, std::size_t grid_height)
     : snake(grid_width, grid_height),
       engine(dev()),
-      random_w(0, static_cast<int>(grid_width)),
-      random_h(0, static_cast<int>(grid_height)) {
+      random_w(0, static_cast<int>(grid_width - 1)),
+      random_h(0, static_cast<int>(grid_height - 1)) {
   PlaceFood();
 }
 void Game::food_mover()
@@ -78,7 +78,7 @@ void Game::Run(Controller const &controller, Renderer &renderer,
       frame_count = 0;
       title_timestamp = frame_end;
     }
-
+     
     // If the time for this frame is too small (i.e. frame_duration is
     // smaller than the target ms_per_frame), delay the loop to
     // achieve the correct frame rate.
@@ -86,6 +86,7 @@ void Game::Run(Controller const &controller, Renderer &renderer,
       SDL_Delay(target_frame_duration - frame_duration);
     }
   }
+  t.join();
 }
 
 void Game::PlaceFood() {
@@ -105,7 +106,7 @@ void Game::PlaceFood() {
     if (!snake.SnakeCell(x, y) && flag == false) {
       food.x = x;
       food.y = y;
-      cout<<"food placed at: "<<food.x<<" "<<food.y<<endl;
+      //cout<<"food placed at: "<<food.x<<" "<<food.y<<endl;
       return;
     }
   }
@@ -129,7 +130,7 @@ void Game::PlaceObstacle(){
       temp.y = y;
       cout<<"obstacle updated"<<endl;
       obstacles.push_back(temp);
-      cout<<"obstacle placed at: "<<temp.x<<" "<<temp.y<<endl;
+     // cout<<"obstacle placed at: "<<temp.x<<" "<<temp.y<<endl;
       return;
     }
 
@@ -140,13 +141,13 @@ void Game::Update() {
   //if (!snake.alive) return;
   if (snake.num_lives == MAX_NUM_LIVES)
   {
-   cout<<"Game over\n"; 
+   //cout<<"Game over\n"; 
    return;
   }
   else
   {
    snake.alive = true;
-   score = 0;
+   //score = 0;
   }
     
 
@@ -177,7 +178,7 @@ void Game::Update() {
       snake.Restart();
       snake.num_lives++;
       obstacles.clear();
-      cout<<"You are DEAD!! you have " << MAX_NUM_LIVES - snake.num_lives << " lives\n";
+      //cout<<"You are DEAD!! you have " << MAX_NUM_LIVES - snake.num_lives << " lives\n";
     }
   }    
 }
